@@ -3,13 +3,6 @@ import requests
 
 def emotion_detector(text_to_analyze):
     '''This function uses the Watson NLP libraries to return emotion reading'''
-    # Initiate emotion scores
-    anger_score = None
-    disgust_score = None
-    fear_score = None
-    joy_score = None
-    sadness_score = None
-    dominant_emotion = None
 
     # Define the URL for the emotion analysis API
     url = 'https://sn-watson-emotion.labs.skills.network/v1/watson.runtime.nlp.v1/NlpService/EmotionPredict'
@@ -20,6 +13,17 @@ def emotion_detector(text_to_analyze):
 
     # Make a POST request to the API with the payload and headers
     response = requests.post(url, json=input_json, headers=headers)
+
+    # Handle errors from request response
+    if response.status_code == 400:
+        return {
+            'anger': None,
+            'disgust': None,
+            'fear': None,
+            'joy': None,
+            'sadness': None,
+            'dominant_emotion': None
+        }
 
     # Parse the response from the API
     formatted_response = json.loads(response.text)
